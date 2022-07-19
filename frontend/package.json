@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@icon-park/svg": "^1.4.2",
+    "framer-motion": "^6.5.1",
     "next": "12.2.2",
     "next-i18next": "^11.0.0",
     "next-redux-wrapper": "^7.0.5",
