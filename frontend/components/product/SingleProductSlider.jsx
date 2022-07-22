@@ -20,6 +20,7 @@ export default function ProductSliders({productHover,type}) {
         <Slider
           asNavFor={nav2}
           ref={slider => setNav1(slider)}
+          arrows={false}
         >
            <div className="relative flex h-full justify-center  overflow-hidden bg-gray-100">
             <div className="absolute left-1 top-1">
@@ -37,6 +38,7 @@ export default function ProductSliders({productHover,type}) {
           slidesToShow={1}
           swipeToSlide={true}
           focusOnSelect={true}
+          arrows={false}
           className="px-10 my-6 "
         >
             <div className="flex justify-center ">

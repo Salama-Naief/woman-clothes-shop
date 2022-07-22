@@ -1,5 +1,11 @@
 import { useState } from "react";
-import {  MdOutlineDehaze, MdOutlinePersonOutline, MdOutlineSearch, MdOutlineShoppingBasket,MdOutlineClear } from "react-icons/md";
+import {  MdOutlineDehaze, MdOutlinePersonOutline, 
+MdOutlineSearch, MdOutlineShoppingBasket,
+MdOutlineClear,MdOutlineHome ,
+MdHelpOutline,MdOutlineGridView,
+MdOutlineFavoriteBorder ,
+MdChevronRight
+} from "react-icons/md";
 
 
 const HeadBar=()=>{
@@ -66,7 +72,7 @@ const HeadBar=()=>{
 
     return(
             <div className="container mx-auto flex items-center justify-between py-2 px-2 md:px-0 shadow-sm md:shadow-none font-serif"> 
-                  <div className="w-1/2 md:w-1/3 text-xl md:text-3xl font-serif text-gray-900 flex items-center cursor-pointer" onClick={()=>handleMenus('items')}><MdOutlineDehaze className="text-2xl mx-2 md:text-4xl"/><span>SMN</span> </div>
+                  <div className="w-1/2 md:w-1/3 text-xl md:text-3xl font-serif text-gray-900 flex items-center cursor-pointer" onClick={()=>handleMenus('items')}><MdOutlineDehaze className="text-2xl mx-2 md:hidden"/><span>SMN</span> </div>
                         <form className="hidden md:flex w-1/3 text-gray-900 border border-gray-400 items-center">
                         <div className="flex items-center w-full">
                             <input type="text" className="flex-grow outline-none px-1 py-0 text-sm md:text-base md:px-4 md:py-1" placeholder="Search"/>
@@ -95,50 +101,50 @@ const HeadBar=()=>{
 
                         {/*login and register menu*/}
           {
-            menuLogin&&<div className="z-10 bg-white text-primary fixed bottom-0 right-0 w-5/6 md:w-1/3 h-full md:h-5/6 border border-primary px-8">
-              <div className="absolute top-5 left-5 text-xl md:text-3xl p-0.5 md:p-1 border border-primary rounded-full cursor-pointer" onClick={()=>closeMenus()}><MdOutlineClear/></div>
-              <div className="text-primary text-xl md:text-3xl w-full text-center my-6">{!menuRegister?"Login":"Register"}</div>
+            menuLogin&&<div className="z-50 bg-white text-gray-900 fixed bottom-0 right-0 w-5/6 md:w-1/3 h-full md:h-5/6 border border-gray-400 px-8">
+              <div className="absolute top-5 left-5 text-xl md:text-3xl p-0.5 md:p-1 border border-secondary rounded-full cursor-pointer" onClick={()=>closeMenus()}><MdOutlineClear/></div>
+              <div className="text-gray-900 text-xl md:text-3xl w-full text-center my-6">{!menuRegister?"Login":"Register"}</div>
               <div className="text-red-600 text-xl md:text-3xl w-full text-center my-4">Error Message</div>
               <form className="" onSubmit={handleSubmit}>
-              <input type="email" required className="outline-none border border-primary my-4 w-full px-4 py-2" placeholder="Email"/>
-              {  menuRegister&&<input type="type" required className="outline-none border border-primary my-4 w-full px-4 py-2" placeholder="User Name"/>}
-              <input type="password" required className="outline-none border border-primary my-4 w-full px-4 py-2" placeholder="Password"/>
+              <input type="email" required className="outline-none border border-gray-400 my-4 w-full px-4 py-2" placeholder="Email"/>
+              {  menuRegister&&<input type="type" required className="outline-none border border-gray-400 my-4 w-full px-4 py-2" placeholder="User Name"/>}
+              <input type="password" required className="outline-none border border-gray-400 my-4 w-full px-4 py-2" placeholder="Password"/>
               <button type="submit" className="bg-primary py-2 w-full text-white ">{menuRegister?"REGISTER":"LOGIN"}</button>
               </form>
-              <div className="text-primary my-4" onClick={()=>loginOrRegister()}><span>try new user?</span><span className="text-red-600">{menuRegister?"Login":"Register"}</span></div>
+              <div className="text-gray-900 my-4" onClick={()=>loginOrRegister()}><span>try new user?</span><span className="text-primary">{menuRegister?"Login":"Register"}</span></div>
             </div>
           }
           {/*menu cart of product*/}
           {
-            menuCart&&<div className="z-10 bg-white text-primary fixed bottom-0 right-0 w-5/6 md:w-1/3 md:h-5/6 h-full border border-primary px-8">
+            menuCart&&<div className="z-50 bg-white text-gray-900 fixed bottom-0 right-0 w-5/6 md:w-1/3 md:h-5/6 h-full border border-gray-400 px-8">
             <div className="">
-              <div className="absolute top-5 left-5 text-xl md:text-3xl md:p-1 p-0.5 border border-primary rounded-full cursor-pointer" onClick={()=>closeMenus()}><MdOutlineClear/></div>
-              <div className="text-primary text-xl md:text-3xl w-full text-center my-6">Product Cart</div>
+              <div className="absolute top-5 left-5 text-xl md:text-3xl md:p-1 p-0.5 border border-secondary rounded-full cursor-pointer" onClick={()=>closeMenus()}><MdOutlineClear/></div>
+              <div className="text-gray-900 text-xl md:text-3xl w-full text-center my-6">Product Cart</div>
               <div className="text-red-600 text-xl md:text-3xl w-full text-center my-4">Error Message</div>
             </div>
             <div className="overflow-y-scroll mt-6">
             {cartProduct.length&&cartProduct.map(product=>(
-                <div className="border border-primary relative p-1 my-4">
-                    <div className="absolute md:top-3 top-1 right-1 md:right-3 md:text-2xl p-0.5 md:p-1 text-red-600 border border-red-600 rounded-full cursor-pointer" onClick={()=>closeMenus()}><MdOutlineClear/></div>
+                <div className="border border-gray-400 relative p-1 my-4">
+                    <div className="absolute md:top-3 top-1 right-1 md:right-3 md:text-2xl p-0.5 md:p-1 text-gray-900 border border-secondary rounded-full cursor-pointer" onClick={()=>closeMenus()}><MdOutlineClear/></div>
                   <div className="flex">
                     <div className="w-1/3 h-full overflow-hidden">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKohNCwmAwI7PtV9Fn0unR8T49HfgXYeQjIg&usqp=CAU" className="w-full h-full object-cover" alt=""/>      
                     </div>
                     <div className="flex w-2/3 px-4 items-center justify-between">
-                    <div className="flex flex-col items-between">
+                    <div className="flex text-gray-900 flex-col items-between">
                         <div className="py-2">name</div>
                         <div className="py-2">red</div>
                         <div className="pt-2">xl</div>
                     </div>
                     <div className="justify-end flex flex-col items-end h-full">
-                        <input mini="1" type="number" className="outline-none w-10 md:my-4 my-1 text-primary border border-primary"/>
-                        <div className="py-2 text-red-600 ">$889</div>
+                        <input mini="1" type="number" className="outline-none w-10 md:my-4 my-1 text-gray-900 border border-gray-400"/>
+                        <div className="py-2 text-secondary ">$889</div>
                     </div>
                     </div>
                   </div>
                 </div>
             ))}
-            <div className="text-center text-primary p-2 border border-primary mt-6 mb-4">total cost : <span className="text-red-600">888</span></div>
+            <div className="text-center text-gray-900 p-2 border border-gray-400 mt-6 mb-4">total cost : <span className="text-secondary">$888</span></div>
               <button className="bg-primary py-2 w-full text-white mb-4">PAYMENT</button>
             </div>
             </div>
@@ -146,21 +152,24 @@ const HeadBar=()=>{
           
               {/*small size size menu*/}
           {
-            menuItems&&<div className="z-10 md:hidden bg-white text-primary fixed bottom-0 left-0 w-5/6 md:w-1/3 h-full md:h-5/6 border border-primary px-8">
-              <div className="absolute top-5 right-5 text-xl md:text-3xl p-0.5 md:p-1 border border-primary rounded-full cursor-pointer" onClick={()=>closeMenus()}><MdOutlineClear/></div>
-              <div className="text-primary text-xl md:text-3xl w-full text-center my-6">Menu</div>
-              <div className="flex justify-center items-center mx-1" onClick={()=>handleMenus("login")}><span className="p-1 rounded-full border border-primary text-primary"><MdOutlinePersonOutline className="text-4xl cursor-pointer"/></span></div>
-                <form className="my-4 text-primary border border-primary flex items-center">
+            menuItems&&<div className="z-50 md:hidden bg-white text-gray-900 fixed bottom-0 left-0 w-5/6 md:w-1/3 h-full md:h-5/6 border border-gray-400 px-8">
+              <div className="absolute top-5 right-5 text-xl md:text-3xl p-0.5 md:p-1 border border-secondary rounded-full cursor-pointer" onClick={()=>closeMenus()}><MdOutlineClear/></div>
+              <div className="text-gray-900 text-xl md:text-3xl w-full text-center my-6">Menu</div>
+              <div className="flex justify-center items-center mx-1" onClick={()=>handleMenus("login")}><span className="p-1 rounded-full border border-gray-400 text-gray-900"><MdOutlinePersonOutline className="text-4xl cursor-pointer"/></span></div>
+                <form className="my-4 text-gray-900 border border-gray-400 flex items-center">
               <div className="flex items-center">
                   <input type="text" className="flex-grow-1 outline-none  w-full px-4 py-2" placeholder="Search"/>
                   <MdOutlineSearch className="text-3xl cursor-pointer"/>
                 </div>
                 </form>
             <div className=" text-base ">
-                <div className=" my-4 flex items-center py-1.5 border border-primary cursor-pointer"> <MdOutlineHome className="text-3xl mx-2"/><span>Home</span></div>
-                <div className="my-4 flex items-center py-1.5 border border-primary   cursor-pointer"><MdHelpOutline className="mx-2 text-3xl "/><span>Help</span></div>
-                <div className="my-4 flex items-center py-1.5 border border-primary  cursor-pointer"><MdOutlineGridView className="mx-2 text-3xl "/><span>Collection</span></div>
-                <div className="my-4 flex items-center py-1.5 border border-primary  cursor-pointer"><MdOutlineFavoriteBorder className="mx-2 text-3xl"/><span>LovedProduct</span></div>
+                <div className="px-4 my-4 flex items-center py-1.5 border flex justify-between  cursor-pointer"> <span>Home</span> <MdChevronRight className="text-xl text-gray-400"/> </div>
+                <div className="px-4 my-4 flex items-center py-1.5 border  flex justify-between cursor-pointer"><span>New</span> <MdChevronRight className="text-xl text-gray-400"/> </div>
+                <div className="px-4 my-4 flex items-center py-1.5 border flex justify-between cursor-pointer"><span>Pubular</span> <MdChevronRight className="text-xl text-gray-400"/> </div>
+                <div className="px-4 my-4 flex items-center py-1.5 border flex justify-between cursor-pointer"><span>Clothes</span> <MdChevronRight className="text-xl text-gray-400"/> </div>
+                <div className="px-4 my-4 flex items-center py-1.5 border flex justify-between cursor-pointer"><span>Shoes</span> <MdChevronRight className="text-xl text-gray-400"/> </div>
+                <div className="px-4 my-4 flex items-center py-1.5 border flex justify-between cursor-pointer"><span>Gags&&Accesories</span> <MdChevronRight className="text-xl text-gray-400"/> </div>
+                <div className="px-4 my-4 flex items-center py-1.5 border flex justify-between cursor-pointer"><span>Sales</span> <MdChevronRight className="text-xl text-gray-400"/> </div>
             </div>
           </div>
           } 
