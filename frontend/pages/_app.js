@@ -1,14 +1,16 @@
 import '../styles/globals.css'
-import TopNavbar from "../components/TopNavbar"
-import HeadBar from '../components/HeadBar'
+import StoreProvider from '../utils/Store'
 function MyApp({ Component, pageProps }) {
   return(
-    <>
-    <HeadBar/>
-    <TopNavbar/>
-    <Component {...pageProps} />
-    </>
+    <StoreProvider>
+      <div className='font-serif'>
+          <Component {...pageProps} />
+      </div>
+
+    </StoreProvider>
     )
 }
+
+
 
 export default MyApp

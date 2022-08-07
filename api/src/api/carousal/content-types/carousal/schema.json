@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "carousals",
+  "info": {
+    "singularName": "carousal",
+    "pluralName": "carousals",
+    "displayName": "carousal",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "collections": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::colection-of-product.colection-of-product",
+      "mappedBy": "carousal"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

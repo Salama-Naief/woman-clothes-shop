@@ -1,0 +1,127 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "product",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "offer": {
+      "type": "decimal",
+      "required": false
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "productImg": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "meta_title": {
+      "type": "string",
+      "required": true
+    },
+    "meta_desc": {
+      "type": "text",
+      "required": true
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "products"
+    },
+    "collections": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::colection-of-product.colection-of-product",
+      "inversedBy": "products"
+    },
+    "color": {
+      "type": "string",
+      "required": true
+    },
+    "size": {
+      "type": "enumeration",
+      "enum": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "required": true,
+      "default": "S"
+    },
+    "smDisc": {
+      "type": "text",
+      "required": true
+    },
+    "rate": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 5
+    },
+    "genre": {
+      "type": "enumeration",
+      "enum": [
+        "clothes",
+        "bags",
+        "accesories",
+        "shoes"
+      ],
+      "required": true
+    },
+    "numberInStock": {
+      "required": true,
+      "default": 0,
+      "min": 0,
+      "type": "integer"
+    },
+    "type": {
+      "type": "string"
+    },
+    "hoverImg": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "userLiked": {
+      "type": "json"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "kind": "collectionType",
+  "collectionName": "landingpages",
+  "info": {
+    "singularName": "landingpage",
+    "pluralName": "landingpages",
+    "displayName": "landingpage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "collection": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::colection-of-product.colection-of-product",
+      "mappedBy": "landingPage"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "img": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "subTitle": {
+      "type": "text",
+      "required": true
+    },
+    "desc": {
+      "type": "text",
+      "required": true
+    },
+    "btnText": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "carousal",
+        "topCollection",
+        "bottomCollection"
+      ],
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "new",
+        "collection",
+        "sales"
+      ],
+      "required": true
+    }
+  }
+}
