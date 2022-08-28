@@ -3,14 +3,16 @@ import Slider from "react-slick";
 import {FlatTree, motion} from "framer-motion"
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import { MdOutlineFavoriteBorder } from "react-icons/md";
+import { MdOutlineFavoriteBorder,MdOutlineFavorite } from "react-icons/md";
 import Link from "next/link";
 import {API_URL} from "../../utils/connectionConfig";
 import { Store } from "../../utils/Store";
 import { useRouter } from "next/router";
+import Image from "next/image";
+import dynamic from "next/dynamic";
+import {useTranslation} from "next-i18next";
 
-
-export default function ProductSliders({productHover,product,id}) {
+ function ProductSliders({productHover,product,id}) {
     const router =useRouter();
     const {state,dispatch} =useContext(Store);
     const[nav1,setNav1]=useState(null)
@@ -19,28 +21,38 @@ export default function ProductSliders({productHover,product,id}) {
     const [imgHover,setImgHover]=useState(false);
     const [productRate,setProductRate]=useState(product.rate)
     const [waitRes,setWaitRes]=useState(false)
+    const [liked,setLiked]=useState(false)
     const [errMsg,setErrMsg]=useState("")
+    const {t,i18n}=useTranslation();
+
+ 
+    //use Effect
+    useEffect(()=>{
+          if(product.userLiked&&product.userLiked.filter(a=>a.userId===state.user?.user.id).length>0){
+            setLiked(true)
+          }else{
+            setLiked(false)
+          }
+    },[state.user,product])
+
+
+    //add to cart function
     const handleAddToCart=()=>{
+     
       const item=state.cart.cartItems.find(item=>item.slug===product.slug)
       const qty=item?item.quantity+1:1;
       dispatch({type:"ADD_TO_CART",payload:{...product,quantity:qty}})
       
     }
 
-    useEffect(()=>{
-       console.log("router",router)
-    },[])
- 
-
-  
+  //handle like and dislike
   const handleLike=async()=>{
-     console.log("product",product);
-     console.log("product",state.user);
-     
+
+    
       let rate={};
-    if(!waitRes&&state.user.user){
+    if(!waitRes&&state.user){
       if(product.userLiked){
-        if(product.userLiked.filter(a=>a.userId===state.user.user.id).length<0){
+        if(product.userLiked.filter(a=>a.userId===state.user.user.id).length<=0){
           rate={
             data:{
               rate:product.rate+1,
@@ -84,9 +96,27 @@ export default function ProductSliders({productHover,product,id}) {
       setErrMsg("")
       setWaitRes(false)
       router.push(router.asPath)
+      setLiked(!liked);
      }
-     console.log("rate",productRate)
+   
     }
+    }
+
+    //returm imge url
+    const imgData=(img)=>{
+      if(img.attributes.formats.small){
+        return {
+          url:img.attributes.formats.small.url,
+          width:img.attributes.formats.small.width,
+          height:img.attributes.formats.small.height
+        }
+      }else{
+        return {
+          url:img.attributes.url,
+          width:img.attributes.width,
+          height:img.attributes.height
+        }
+      }
     }
     return (
       <motion.div className="w-full"
@@ -94,26 +124,41 @@ export default function ProductSliders({productHover,product,id}) {
       >
         <Slider
           asNavFor={nav2}
+          lazyLoad={true}
           ref={slider => setNav1(slider)}
         >{product.productImg.data.length&&product.productImg.data.map(productImg=>(
-          <div key={productImg.attributes.name} className="relative flex justify-center  overflow-hidden ">
-          <Link href={`/product/${product?.slug}`}>
-            <a onMouseEnter={()=>setImgHover(true)} onMouseLeave={()=>setImgHover(false)}>
-             {!imgHover&&<motion.img initial={{opacity:0}}  animate={{opacity:1}} transition={{duration:0.1,ease:"easeInOut"}} src={`${API_URL}${productImg.attributes.url}`} alt="" className={`w-full h-80 object-contain `} />}
-            { imgHover&&<motion.img initial={{opacity:0}}  animate={{opacity:1}} transition={{duration:0.1,ease:"easeInOut"}} src={`${API_URL}${product.hoverImg.data.attributes.url}`} alt="" className={`w-full h-80 object-contain `} />}
-            </a>
-          </Link>
-           {productHover&&<motion.button initial={{opacity:0}}  animate={{opacity:1}} transition={{duration:0.2,ease:"easeInOut"}} onClick={()=>handleAddToCart()}  className={`left-0 right-0 mx-8 absolute z-20 bottom-8  transition ease-in-out delay-0 duration-500 border border-primary bg-white text-primary hover:bg-primary py-2 hover:text-white uppercase `}>add to card </motion.button>}
+          <div key={productImg.id} className="relative flex justify-center  overflow-hidden ">
+            <div className="h-68 w-full overflow-hidden">
+              <Link href={`/product/${product?.slug}`}>
+                <a onMouseEnter={()=>setImgHover(true)} onMouseLeave={()=>setImgHover(false)} className=" ">
+                  <div className="md:h-72 h-48 w-full relative  overflow-hidden">
+                      {<Image src={`${API_URL}${productImg.attributes.formats.small.url}`} alt="" layout="fill" objectFit="contain" objectPosition={"center"} loading="lazy"/>}
+                  </div>
+                {/*<motion.Image initial={{display:"none"}}  animate={imgHover?{display:"block"}:{display:"none"}} transition={{type:"tween" ,duration:0.3}} src={`${API_URL}${product.hoverImg.data.attributes.url}`} alt="" width={400} height={256} layout="responsive" />*/}
+                {/*<img src={`${API_URL}${imgData(productImg).url}`} alt="" className="w-full h-64 object-contain"/>*/}
+                </a>
+              </Link>
+            </div>
+          
+           {productHover&&<div className="left-auto right-auto px-4 w-full absolute z-20 bottom-8">
+             <motion.button initial={{display:"none"}}  animate={productHover?{display:"block"}:{display:"none"}} transition={{duration:0.3,type:"tween"}} onClick={()=>handleAddToCart()}  className={` w-full transition ease-in-out delay-0 duration-500 border border-primary bg-white text-primary hover:bg-primary py-2 hover:text-white uppercase `}>{t("product:add_to_card")}</motion.button>
+           </div>}
         </div>
         ))
           
          }
         </Slider>
         <div className="flex justify-between items-center px-4 my-4">
-            <div className="font-semibold uppercase text-sm text-third"> {product?.name}</div>
+            <div className=" uppercase text-sm text-third"> {product&&(i18n.language==="ar"?product.name_arabic:product.name)}</div>
             <div className="flex items-center">
               <div className="text-primary px-2">{productRate}</div>
-            <MdOutlineFavoriteBorder onClick={()=>handleLike()} className="cursor-pointer"/>
+              {
+                liked?(
+                  <MdOutlineFavorite onClick={()=>handleLike()} className="cursor-pointer text-primary"/>
+                ):(
+                  <MdOutlineFavoriteBorder onClick={()=>handleLike()} className="cursor-pointer text-gray-800"/>
+                )
+              } 
             </div>
         </div>
         <Slider
@@ -127,8 +172,8 @@ export default function ProductSliders({productHover,product,id}) {
           {product.productImg.data.length&&product.productImg.data.map(productImg=>(
             <div key={productImg.id} className="flex justify-center ">
                 
-                <div onClick={()=>setProductId(productImg.attributes.name)} className={`relative cursor-pointer w-7 h-7 overflow-hidden rounded-full border ${productId===productImg.attributes.name?"border-secondary":"border-gray-400"} p-0.5`}>
-                    <img src={`${API_URL}${productImg.attributes.url}`} className="h-full w-full rounded-full object-cover" alt="" />
+                <div onClick={()=>setProductId(productImg.attributes.name)} className={`relative cursor-pointer h-7 w-7 overflow-hidden rounded-full border ${productId===productImg.attributes.name?"border-secondary":"border-gray-400"} p-0.5`}>
+                    <Image src={`${API_URL}${productImg.attributes.formats.thumbnail.url}`} loading="lazy" layout="fill" objectFit="contain" objectPosition="center" alt="" />
                 </div>
             </div>
             ))
@@ -138,3 +183,5 @@ export default function ProductSliders({productHover,product,id}) {
     );
   
 }
+
+export default dynamic(() => Promise.resolve(ProductSliders), { ssr: false });

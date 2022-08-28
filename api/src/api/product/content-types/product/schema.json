@@ -122,6 +122,30 @@
     },
     "userLiked": {
       "type": "json"
+    },
+    "name_arabic": {
+      "type": "string"
+    },
+    "description_arabic": {
+      "type": "richtext"
+    },
+    "color_arabic": {
+      "type": "string"
+    },
+    "smDisc_arabic": {
+      "type": "string"
+    },
+    "genre_arabic": {
+      "type": "enumeration",
+      "enum": [
+        "ملابس",
+        "شنط",
+        "احذية",
+        "مجوهرات"
+      ]
+    },
+    "type_arabic": {
+      "type": "string"
     }
   }
 }

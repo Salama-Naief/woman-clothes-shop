@@ -5,20 +5,24 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { API_URL } from "../../utils/connectionConfig";
 import { Offer } from "../../utils/Calc";
+import Image from "next/image";
+import dynamic from "next/dynamic";
 
 
-export default function ProductSliders({productHover,type,product,setPImg}) {
+ function SingleProductSliders({productHover,type,product,setPImg}) {
 
     const[nav1,setNav1]=useState(null)
     const[nav2,setNav2]=useState(null)
     const[productImg,setProudctImg]=useState(product.productImg.data[0].attributes.name)
-    const[pUrl,setPUrl]=useState(product.productImg.data[0].attributes.url)
+    const[pUrl,setPUrl]=useState(product.productImg.data[0].attributes.formats.thumbnail.url)
 
     useEffect(()=>{
       setPImg(pUrl)
-    },[pUrl])
+    },[pUrl,setPImg])
+
+ 
     return (
-      <motion.div className="w-full"
+      <div className="w-full"
        
       >
         <Slider
@@ -34,7 +38,8 @@ export default function ProductSliders({productHover,type,product,setPImg}) {
                      {product.offer>0&& <div className=" bg-secondary  rounded px-2 py-0.5  text-white">-{Offer(product.price,product.offer)}%</div>}
                       <div className=" bg-primary my-1 rounded px-2 py-0.5  text-white">new</div>
                     </div>
-                    <img  onMouseMoveCapture={()=>{setProudctImg(pImg.attributes.name); setPUrl(pImg.attributes.url)}} src={`${API_URL}${pImg.attributes.url}`} alt={pImg.attributes.name} className={`w-full h-full object-contain cursor-grab `} /> 
+                    
+                    {<Image src={`${API_URL}${pImg.attributes.url}`} width={pImg.attributes.width} height={pImg.attributes.height} onMouseMoveCapture={()=>{setProudctImg(pImg.attributes.name); setPUrl(pImg.attributes.url)}} layout="responsive" objectFit="contain" objectPosition="center" loading="lazy" alt={pImg.attributes.name} className={`w-full h-full object-contain cursor-grab `} />}
             </div>
             ))
            }
@@ -53,13 +58,16 @@ export default function ProductSliders({productHover,type,product,setPImg}) {
             product.productImg.data.length&&product.productImg.data.map(pImg=>(
             <div key={pImg.attributes.name} className="flex justify-center ">
                 
-                <div onClick={()=>{setProudctImg(pImg.attributes.name);setPUrl(pImg.attributes.url)}}  className={`relative bg-gray-100 w-16 h-16 overflow-hidden rounded-full border-2 ${productImg===pImg.attributes.name?"border-secondary":"border-gray-400"} p-0.5`}>
-                    <img src={`${API_URL}${pImg.attributes.url}`} alt={pImg.attributes.name}  className="object-contain w-full h-full"/>
+                <div onClick={()=>{setProudctImg(pImg.attributes.name);setPUrl(pImg.attributes.url)}}  className={`relative bg-gray-100 w-10 h-10 md:w-16 md:h-16 overflow-hidden rounded-full border-2 ${productImg===pImg.attributes.name?"border-secondary":"border-gray-400"} p-0.5`}>
+                    
+                    <Image src={`${API_URL}${pImg.attributes.formats.thumbnail.url}`} loading="lazy" objectFit="contain" objectPosition="center" layout="fill" alt="" />
                 </div>
             </div>
             ))}
         </Slider>
-      </motion.div>
+      </div>
     );
   
 }
+
+export default dynamic(() => Promise.resolve(SingleProductSliders), { ssr: false });

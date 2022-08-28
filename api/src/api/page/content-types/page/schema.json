@@ -14,7 +14,8 @@
   "attributes": {
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "pluginOptions": {}
     },
     "slug": {
       "type": "uid",
@@ -23,39 +24,45 @@
     },
     "offerText": {
       "type": "string",
-      "required": true
+      "required": true,
+      "pluginOptions": {}
     },
     "popularText": {
       "type": "string",
-      "required": true
+      "required": true,
+      "pluginOptions": {}
     },
     "newText": {
       "type": "string",
-      "required": true
+      "required": true,
+      "pluginOptions": {}
     },
     "offerImg": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
       "allowedTypes": [
         "images"
       ],
-      "type": "media",
-      "multiple": false,
-      "required": true
+      "pluginOptions": {}
     },
     "popularImg": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
       "allowedTypes": [
         "images"
       ],
-      "type": "media",
-      "multiple": false,
-      "required": true
+      "pluginOptions": {}
     },
     "newImg": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
       "allowedTypes": [
         "images"
       ],
-      "type": "media",
-      "multiple": false,
-      "required": true
+      "pluginOptions": {}
     },
     "categories": {
       "type": "relation",
@@ -68,6 +75,18 @@
       "relation": "oneToMany",
       "target": "api::colection-of-product.colection-of-product",
       "mappedBy": "page"
+    },
+    "name_arabic": {
+      "type": "string"
+    },
+    "offerText_arabic": {
+      "type": "string"
+    },
+    "popularText_arabic": {
+      "type": "string"
+    },
+    "newText_arabic": {
+      "type": "string"
     }
   }
 }

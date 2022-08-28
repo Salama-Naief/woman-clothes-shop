@@ -66,6 +66,18 @@
         "sales"
       ],
       "required": true
+    },
+    "title_arabic": {
+      "type": "string"
+    },
+    "subTitle_arabic": {
+      "type": "string"
+    },
+    "desc_arabic": {
+      "type": "text"
+    },
+    "btnText_arabic": {
+      "type": "string"
     }
   }
 }

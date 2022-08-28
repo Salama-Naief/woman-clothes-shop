@@ -56,7 +56,7 @@ function reducer(state,action){
       }
       case "ADD_VIEWED_CARD":{
         const newItem=action.payload;        
-        const existItem=state.cart.cartItems.find(item=>item.slug===newItem.slug);
+        const existItem=state.viewedCart.find(item=>item.slug===newItem.slug);
         const viewedCart=existItem?state.viewedCart.map(item=>
           item.slug===existItem.slug?newItem:item
         ):[...state.viewedCart,newItem];

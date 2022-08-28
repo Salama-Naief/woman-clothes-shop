@@ -1,57 +1,86 @@
 import { useRouter } from 'next/router';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect, useRef, useState } from 'react';
 import {MdArrowBackIosNew,MdArrowForwardIos} from "react-icons/md"
 import {motion} from "framer-motion";
 import Layout from '../../components/Layout';
 import ProductCard from "../../components/product/ProductCard";
 import { API_URL } from '../../utils/connectionConfig';
+import Loading from '../../components/loading/Loading';
+import { useTranslation } from 'next-i18next';
 
- function Products({products,pages}){
+ function Products({products,pages,errMsg}){
     const router=useRouter();
-    const [color,setColor]=useState("");
+    const {t,i18n}=useTranslation();
     const [productItems,setproductItems]=useState(products);
     const [maxPrice,setMaxPrice]=useState(0);
     const [miniPrice,setMiniPrice]=useState(0);
     const [price,setPrice]=useState(0);
     const [size,setSize]=useState("");
     const [category,setCategory]=useState("");
+    const [color,setColor]=useState("");
+   // const [sizeArray,setSizeArray]=useState("");
+   // const [categoryArray,setCategoryArray]=useState("");
+   // const [colorArray,setColorArray]=useState("");
     const [sideFilter,setSideFilter]=useState(false);
+    const [loading,setLoading]=useState(true);
     const progres=useRef(); 
+
+    
+    //loading
+    useEffect(()=>{
+        setLoading(false);
+    },[])
+
+    useEffect(()=>{
+        setproductItems(products);
+        setPrice(maxPrice);
+     },[products])
+     
+    useEffect(()=>{
+        progres.current&&(progres.current.style.width=`${i18n.language==="ar"?-(((price-miniPrice)/(maxPrice-miniPrice))*100):(((price-miniPrice)/(maxPrice-miniPrice))*100)}%`)
+    },[price,progres,maxPrice,miniPrice,i18n.language])
+
+
 
     const colorArray=[];
     const categoryArray=[];
     const sizeArray=[];
-    // const productItems=[...products]
-
-    products.forEach(item=>{  
+  //  let miniPrice=0;
+   // let maxPrice=0;
+   products&&products.forEach(item=>{  
         if(item.attributes.price>maxPrice){
+            //maxPrice=item.attributes.price
             setMaxPrice(item.attributes.price)
         } 
         if(item.attributes.price<miniPrice&&miniPrice!==0){
+            //miniPrice=item.attributes.price
             setMiniPrice(item.attributes.price)
         }else if(miniPrice===0){
+            //miniPrice=item.attributes.price
             setMiniPrice(item.attributes.price)
         }
-        if(!colorArray.includes(item.attributes.color)){
-            colorArray.push(item.attributes.color)
+        if(!colorArray.includes(i18n.language==="ar"?item.attributes.color_arabic:item.attributes.color)){
+            colorArray.push(i18n.language==="ar"?item.attributes.color_arabic:item.attributes.color)
         }
         if(!sizeArray.includes(item.attributes.size)){
-            sizeArray.push(item.attributes.size)
+            sizeArray.push(i18n.language==="ar"?item.attributes.size:item.attributes.size)
         }
-        if(!categoryArray.includes(item.attributes.category.data?.attributes.name)&&item.attributes.category.data){
-            categoryArray.push(item.attributes.category.data?.attributes.name)
+        if(!categoryArray.includes(i18n.language==="ar"?item.attributes.category.data?.attributes.name_arabic:item.attributes.category.data?.attributes.name)&&item.attributes.category.data){
+            categoryArray.push(i18n.language==="ar"?item.attributes.category.data?.attributes.name_arabic:item.attributes.category.data?.attributes.name)
         }
-    }) 
-    
- 
-     useEffect(()=>{
-        setproductItems(products);
-        setPrice(maxPrice);
-     },[products])
+    })
 
-    useEffect(()=>{
-       progres.current.style.width=`${((price-miniPrice)/(maxPrice-miniPrice))*100}%`
-    },[price])
+  /* useEffect(()=>{
+      
+        setColorArray(colorArr);
+        setCategoryArray(categoryArr);
+        setSizeArray(sizeArr);
+        setMaxPrice(maxPrice)
+        setMiniPrice(miniPrice)
+    },[products,price])*/
+
+
 
    
    const handleFliter=(type)=>{
@@ -92,7 +121,7 @@ import { API_URL } from '../../utils/connectionConfig';
    const handleAllFliters=()=>{
     const items=[];
     setSideFilter(false)
-    products.forEach(item=>{
+    products&&products.forEach(item=>{
         if(item.attributes.price<=price&&
             item.attributes.size===size&&
             item.attributes.color===color &&
@@ -104,6 +133,24 @@ import { API_URL } from '../../utils/connectionConfig';
     setproductItems(items)
    }
 
+//check data frist
+   if(errMsg){
+    return(
+      <Layout>
+        <div className='text-3xl w-full h-screen flex justify-center items-center text-secondary'><div>No Data Found</div></div>  
+    </Layout>
+    )
+  }
+
+ 
+
+        if(loading){
+        return(
+            <Layout title="products pages" pages={pages}>
+                <Loading/>
+            </Layout>
+        )
+        }
     return(
         <Layout title="products pages" pages={pages}>
             <div className="container relative  mx-auto h-fit font-serif my-8 ">
@@ -127,14 +174,14 @@ import { API_URL } from '../../utils/connectionConfig';
                     
                     }
                     </div >
-                       <motion.div initial={{x:400}} animate={{x:sideFilter?0:400}}  transition={{duration:0.2,type:"tween",ease:"easeInOut"}} className={` h-screen overflow-y-scroll md:overflow-visible  border md:block bg-white fixed right-0 top-0 z-30 md:z-0 md:static md:max-h-fit w-3/4 md:w-1/4 p-4 my-4`}>
+                       <motion.div className={` h-screen overflow-y-scroll md:overflow-visible  border md:block bg-white fixed right-0 top-0 z-30 md:z-0 md:static md:h-fit w-3/4 md:w-1/4 p-4 my-4 ${sideFilter?"block":"hidden"}`}>
                          <div className="relative w-full">
-                                <motion.div initial={{x:-15,opacity:0}} animate={{x:sideFilter?-18:-15,opacity:1}} transition={{duration:0.5}} onClick={()=>setSideFilter(false)} className={`flex w-fit fixed z-30 h-screen items-center top-1/6 md:hidden ${sideFilter?"block":"hidden"}`}>
+                                <motion.div initial={{display:"none"}} animate={{display:sideFilter?"flex":"none"}} onClick={()=>setSideFilter(false)} className={`right-2/3 w-fit fixed z-30 h-screen items-center top-1/6 md:hidden`}>
                                     <MdArrowForwardIos className='text-primary text-4xl cursor-pointer'/>
                                 </motion.div>
                             <div>
                             <div className="pt-4">
-                            <div className='text-lg font-semibold py-4'>Fliter By Price:</div>
+                            <div className='text-lg font-semibold py-4'>{t("common:price_filter")}</div>
                             <div className="w-full flex items-center">
                                 <div className='p-1 border mx-1'>${price}</div>
                                 <div className="w-full relative h-2 rounded-full bg-gray-100 border px-0.5">
@@ -143,14 +190,14 @@ import { API_URL } from '../../utils/connectionConfig';
                                 </div>
                                 <div className='p-1 border mx-1'>${maxPrice}</div>
                             </div>
-                            <button onClick={()=>handleFliter("price")} className='my-4 transition ease-in-out delay-0 duration-500 border border-primary bg-white text-gray-900 hover:bg-primary py-1 px-8 hover:text-white'>Filter</button>
+                            <button onClick={()=>handleFliter("price")} className='my-4 transition ease-in-out delay-0 duration-500 border border-primary bg-white text-gray-900 hover:bg-primary py-1 px-8 hover:text-white'>{t("common:filter")}</button>
                             </div>
                             
                         
                             <div className="px-4">
-                            <div className='text-lg font-semibold py-4'>Fliter By Category:</div>
+                            <div className='text-lg font-semibold py-4'>{t("common:category_filter")}</div>
                             <label className=" block my-2">
-                                <input type="radio" value="allCategory" checked={category==="allCategory"?category:""} name="all"  onChange={(e)=>setCategory(e.target.value)} /> <span className='text-lg'>all</span>
+                                <input type="radio" value="allCategory" checked={category==="allCategory"?category:""} name="all"  onChange={(e)=>setCategory(e.target.value)} /> <span className='text-lg'>{t("common:all")}</span>
                             </label>
                             {
                             categoryArray.map((categoryVal,index)=>(   
@@ -159,13 +206,13 @@ import { API_URL } from '../../utils/connectionConfig';
                                 </label>
                             ))
                         }
-                        <button onClick={()=>handleFliter("category")} className='my-4 transition ease-in-out delay-0 duration-500 border border-primary bg-white text-gray-900 hover:bg-primary py-1 px-8 hover:text-white'>Filter</button>
+                        <button onClick={()=>handleFliter("category")} className='my-4 transition ease-in-out delay-0 duration-500 border border-primary bg-white text-gray-900 hover:bg-primary py-1 px-8 hover:text-white'>{t("common:filter")}</button>
                         </div>
                     
                         <div className="px-4">
-                        <div className='text-lg font-semibold py-4'>Fliter By Size:</div>
+                        <div className='text-lg font-semibold py-4'>{t("common:size_filter")}</div>
                         <label className=" block my-2">
-                            <input type="radio" value="allSize" checked={size==="allSize"?size:""} name="cash"  onChange={(e)=>setSize(e.target.value)} /> <span className='text-lg'>all</span>
+                            <input type="radio" value="allSize" checked={size==="allSize"?size:""} name="cash"  onChange={(e)=>setSize(e.target.value)} /> <span className='text-lg'>{t("common:all")}</span>
                         </label>
                         {
                             sizeArray.map((sizeVal,index)=>(   
@@ -174,13 +221,13 @@ import { API_URL } from '../../utils/connectionConfig';
                                 </label>
                             ))
                         }
-                        <button onClick={()=>handleFliter("size")} className='my-4 transition ease-in-out delay-0 duration-500 border border-primary bg-white text-gray-900 hover:bg-primary py-1 px-8 hover:text-white'>Filter</button>
+                        <button onClick={()=>handleFliter("size")} className='my-4 transition ease-in-out delay-0 duration-500 border border-primary bg-white text-gray-900 hover:bg-primary py-1 px-8 hover:text-white'>{t("common:filter")}</button>
                         </div>
                     
                             <div className="px-4">
-                            <div className='text-lg font-semibold py-4'>Fliter By Color:</div>
+                            <div className='text-lg font-semibold py-4'>{t("common:color_filter")}</div>
                             <label className=" block my-2">
-                                <input type="radio" value="allColor" checked={color==="allColor"?color:""} name="allColor"  onChange={(e)=>setColor(e.target.value)} /> <span className='text-lg'>all</span>
+                                <input type="radio" value="allColor" checked={color==="allColor"?color:""} name="allColor"  onChange={(e)=>setColor(e.target.value)} /> <span className='text-lg'>{t("common:all")}</span>
                             </label>
                             {
                                 colorArray.map((colorVal,index)=>(   
@@ -190,12 +237,12 @@ import { API_URL } from '../../utils/connectionConfig';
                                 ))
                             }
                         
-                        <button onClick={()=>handleFliter("color")} className='my-4 transition ease-in-out delay-0 duration-500 border border-primary bg-white text-gray-900 hover:bg-primary py-1 px-8 hover:text-white'>Filter</button>
+                        <button onClick={()=>handleFliter("color")} className='my-4 transition ease-in-out delay-0 duration-500 border border-primary bg-white text-gray-900 hover:bg-primary py-1 px-8 hover:text-white'>{t("common:filter")}</button>
                         </div>
 
                         <div className="my-4">
-                        <div className='text-lg font-semibold py-4'>Fliter <span className='text-base font-normal'> price,category,color,size</span></div>
-                        <button onClick={()=>handleAllFliters()} className='bg-primary text-white  py-1 px-8 w-full'>Filter By All</button>
+                        <div className='text-lg font-semibold py-4'>{t("common:filter")} <span className='text-base font-normal'>{t("common:all_fliters")}</span></div>
+                        <button onClick={()=>handleAllFliters()} className='bg-primary text-white  py-1 px-8 w-full'>{t("common:filter_by_all")}</button>
                         </div>
                     </div>
                 </div>
@@ -210,105 +257,140 @@ import { API_URL } from '../../utils/connectionConfig';
 }
 
 
-export async function getStaticPaths (){
-   
-    const pageRes = await fetch(`${API_URL}/api/pages?populate=*`)
-    const pages = await pageRes.json()
-    const colectinRes = await fetch(`${API_URL}/api/colection-of-products`)
-    const colections = await colectinRes.json()
-    const categoryRes = await fetch(`${API_URL}/api/categories`)
-    const categories = await categoryRes.json()
+export async function getStaticPaths ({locales}){
 
-   const pageCollections=[];
-   const pageCategories=[];
-   const allItems=[];
-   const newItems=[];
-   const salesItems=[];
-   const popularItems=[];
+    try{
+        const pageRes = await fetch(`${API_URL}/api/pages`)
+            const pages = await pageRes.json()
+            const colectinRes = await fetch(`${API_URL}/api/colection-of-products`)
+            const colections = await colectinRes.json()
+            const categoryRes = await fetch(`${API_URL}/api/categories`)
+            const categories = await categoryRes.json()
+        const pageCollections=[];
+        const pageCategories=[];
+        const allItems=[];
+        const newItems=[];
+        const salesItems=[];
+        const popularItems=[];
+        const othePaths=[]
+        colections.data.map(collection=>{
+            locales.map(locale=>{
+                pageCollections.push({params:{genre:`collections-${collection.attributes.slug}`},locale})
+            })
+        
+            })
 
-   colections.data.map(collection=>{
-    pageCollections.push({params:{genre:`collections-${collection.attributes.slug}`}})
- 
-    })
+            categories.data.map(category=>{
+                locales.map(locale=>{
+                    pageCategories.push({params:{genre:`category-${category.attributes.slug}`},locale})
+                })
+            })
 
-    categories.data.map(category=>{
-        pageCategories.push({params:{genre:`category-${category.attributes.slug}`}})
-    })
+        pages.data.map(page=>{
+            locales.map(locale=>{
+                allItems.push({params:{genre:`all-${page.attributes.slug}`},locale})
+                newItems.push({params:{genre:`new-${page.attributes.slug}`},locale})
+                salesItems.push({params:{genre:`sales-${page.attributes.slug}`},locale})
+                salesItems.push({params:{genre:`popular-${page.attributes.slug}`},locale})
+            })
+           
+            })
 
-   pages.data.map(page=>{
-    allItems.push({params:{genre:`all-${page.attributes.slug}`}})
-    newItems.push({params:{genre:`new-${page.attributes.slug}`}})
-    salesItems.push({params:{genre:`sales-${page.attributes.slug}`}})
-    salesItems.push({params:{genre:`popular-${page.attributes.slug}`}})
-    })
-    
-    const paths=[...pageCollections,...pageCategories,...allItems,...newItems,...salesItems,...popularItems,{params:{genre:`popular-products`}},{params:{genre:`new-products`}},{params:{genre:`sales-products`}}]
+            locales.map(locale=>{
+                othePaths.push({params:{genre:`popular-products`},locale})
+                othePaths.push({params:{genre:`new-products`},locale})
+                othePaths.push({params:{genre:`sales-products`},locale})
+                othePaths.push({params:{genre:`collection-products`},locale})
+            })
+            
+            const paths=[...pageCollections,...pageCategories,...allItems,...newItems,...salesItems,...popularItems,...othePaths]
 
-    return{
-        paths,
-        fallback:false
+            return{
+                paths,
+                fallback:false
+            }
+    }catch(err){
+        return{
+            paths:[],
+            fallback:false
+        }
     }
+   
+    
 }
 
 export async function getStaticProps(ctx) {
-    const {genre} =ctx.params;
-    
-    const pagesRes = await fetch(`${API_URL}/api/pages?populate=*`)
-    const pages = await pagesRes.json()
-    
-    const router=genre.split('-');
-    let filterValue=''
-    if(router[2]){
-        filterValue=router[1]+"-"+router[2]
-    }else if(router[3]){
-        filterValue=router[1]+"-"+router[2]+"-"+router[3]
-    }else{
-        filterValue=router[1] 
-    }
-    console.log("router",filterValue)
-    let products;
-    if(router[0]==="new"&&router[1]==="products"){
-        const data = await fetch(`${API_URL}/api/products?/api/products?sort=publishedAt:desc&populate=*&pagination[limit]=30`)
-        products = await data.json()
-    }else if(router[0]==="sales"&&router[1]==="products"){
-        const data = await fetch(`${API_URL}/api/products?filters[offer][$gt]=0&sort=offer:desc&populate=*&pagination[limit]=30`)
-        products = await data.json()
-    }else if(router[0]==="popular"&&router[1]==="products"){ 
-        const data = await fetch(`${API_URL}/api/products?filters[rate][$gt]=0&sort=rate:desc&populate=*&pagination[limit]=30`)
-        products = await data.json()
-    }else if(router[0]==="new"){
-        const currentMonth=new Date().getMonth();
-        const lastMounth=currentMonth+1
-        const data = await fetch(`${API_URL}/api/products?sort=publishedAt:desc&filters[genre][$eq]=${filterValue}&populate=*&pagination[limit]=30`)
-        products = await data.json()
-    }else if(router[0]==="sales"){
-        const data = await fetch(`${API_URL}/api/products??filters[offer][$gt]=0&sort=offer:desc&filters[genre][$eq]=${filterValue}&populate=*&pagination[limit]=30`)
-        products = await data.json()
-    }else if(router[0]==="popular"){ 
-        const data = await fetch(`${API_URL}/api/products?filters[rate][$gte]=1&sort=rate:desc&filters[genre][$eq]=${filterValue}&populate=*&pagination[limit]=30`)
-        products = await data.json()
-    }else if(router[0]==="all"){ 
-        const data = await fetch(`${API_URL}/api/products?filters[genre][$eq]=${filterValue}&populate=*`)
-        products = await data.json()
-    }else if(router[0]==="related"){ 
-        const data = await fetch(`${API_URL}/api/products?filters[genre][$eq]=${filterValue}&populate=*`)
-        products = await data.json()
-    }else if(router[0]==="category"||router[0]==="collections"){
-        const data = await fetch(`${API_URL}/api/products?filters[${router[0]}][slug][$eq]=${filterValue}&populate=*`)
-        products= await data.json()
-       
-    }else{
-        const data = await fetch(`${API_URL}/api/products?populate=*`)
-        products = await data.json()
-    }
 
-   
-    return {
-      props: {
-        products:products.data,
-        pages:pages.data
-      },
+    try{
+        const {genre} =ctx.params;
+        const locale=ctx.locale;
+            
+            const pagesRes = await fetch(`${API_URL}/api/pages?populate=*`)
+            const pages = await pagesRes.json()
+            
+            const router=genre.split('-');
+            let filterValue=''
+            if(router[2]){
+                filterValue=router[1]+"-"+router[2]
+            }else if(router[3]){
+                filterValue=router[1]+"-"+router[2]+"-"+router[3]
+            }else{
+                filterValue=router[1] 
+            }
+    
+            let products;
+            if(router[0]==="new"&&router[1]==="products"){
+                const data = await fetch(`${API_URL}/api/products?/api/products?sort=publishedAt:desc&populate=*&pagination[limit]=30`)
+                products = await data.json()
+            }else if(router[0]==="sales"&&router[1]==="products"){
+                const data = await fetch(`${API_URL}/api/products?filters[offer][$gt]=0&sort=offer:desc&populate=*&pagination[limit]=30`)
+                products = await data.json()
+            }else if(router[0]==="popular"&&router[1]==="products"){ 
+                const data = await fetch(`${API_URL}/api/products?filters[rate][$gt]=0&sort=rate:desc&populate=*&pagination[limit]=30`)
+                products = await data.json()
+            }else if(router[0]==="new"){
+                const currentMonth=new Date().getMonth();
+                const lastMounth=currentMonth+1
+                const data = await fetch(`${API_URL}/api/products?sort=publishedAt:desc&filters[genre][$eq]=${filterValue}&populate=*&pagination[limit]=30`)
+                products = await data.json()
+            }else if(router[0]==="sales"){
+                const data = await fetch(`${API_URL}/api/products??filters[offer][$gt]=0&sort=offer:desc&filters[genre][$eq]=${filterValue}&populate=*&pagination[limit]=30`)
+                products = await data.json()
+            }else if(router[0]==="popular"){ 
+                const data = await fetch(`${API_URL}/api/products?filters[rate][$gte]=1&sort=rate:desc&filters[genre][$eq]=${filterValue}&populate=*&pagination[limit]=30`)
+                products = await data.json()
+            }else if(router[0]==="all"){ 
+                const data = await fetch(`${API_URL}/api/products?filters[genre][$eq]=${filterValue}&populate=*`)
+                products = await data.json()
+            }else if(router[0]==="related"){ 
+                const data = await fetch(`${API_URL}/api/products?filters[genre][$eq]=${filterValue}&populate=*`)
+                products = await data.json()
+            }else if(router[0]==="category"||router[0]==="collections"){
+                const data = await fetch(`${API_URL}/api/products?filters[${router[0]}][slug][$eq]=${filterValue}&populate=*`)
+                products= await data.json()
+            
+            }else{
+                const data = await fetch(`${API_URL}/api/products?populate=*`)
+                products = await data.json()
+            }
+
+        
+            return {
+            props: {
+                products:products.data,
+                pages:pages.data,
+                errMsg:false, 
+                ...(await serverSideTranslations(locale, ['common',"product"]))
+            },
+            }
+    }catch(err){
+        return {
+            props: {
+                errMsg:true
+            },
+        }
     }
+    
   }
 
 export default Products;

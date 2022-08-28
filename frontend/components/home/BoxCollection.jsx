@@ -1,6 +1,7 @@
 
+import dynamic from 'next/dynamic';
 import CardBox from './CardBox'
-export default function BoxCollection({topCollection,bottomCollection}){
+ function BoxCollection({topCollection,bottomCollection}){
  
     return(
       <>
@@ -9,7 +10,7 @@ export default function BoxCollection({topCollection,bottomCollection}){
          {
           topCollection.map((collection,index)=>(
             <div key={index} className='col-span-1'>
-              <CardBox hight="md:h-72" collection={collection.attributes}/>
+              <CardBox height="h-64 md:h-80" collection={collection.attributes}/>
             </div>
           ))
          }
@@ -20,7 +21,7 @@ export default function BoxCollection({topCollection,bottomCollection}){
          {
           bottomCollection.map((collection,index)=>(
             <div key={index} className='col-span-1'>
-              <CardBox hight="md:h-96" collection={collection.attributes}/>
+              <CardBox height="h-80 md:h-96" collection={collection.attributes}/>
             </div>
           ))
          }
@@ -30,3 +31,4 @@ export default function BoxCollection({topCollection,bottomCollection}){
        
     )
 }
+export default dynamic(() => Promise.resolve(BoxCollection), { ssr: false });

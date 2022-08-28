@@ -40,23 +40,33 @@
       "type": "json",
       "required": true
     },
-    "userId": {
-      "type": "string",
-      "required": true
-    },
     "numOfItems": {
       "required": true,
       "type": "integer"
-    },
-    "slug": {
-      "type": "uid",
-      "targetField": "userName"
     },
     "totalPrice": {
       "type": "decimal",
       "min": 0,
       "default": 0,
       "required": true
+    },
+    "userId": {
+      "required": true,
+      "type": "integer"
+    },
+    "isPayed": {
+      "type": "boolean",
+      "default": false
+    },
+    "deleverd": {
+      "type": "boolean",
+      "default": false
+    },
+    "payedAt": {
+      "type": "date"
+    },
+    "deleverdAt": {
+      "type": "date"
     }
   }
 }

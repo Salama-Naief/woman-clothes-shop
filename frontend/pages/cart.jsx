@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect } from 'react'
@@ -29,12 +30,12 @@ export default function Cart() {
                     </tr>
                 </thead>
                 <tbody>
-                   {cartItems?.map(item=>(<tr className='border-b border-gray-400'>
+                   {cartItems?.map((item,index)=>(<tr key={index} className='border-b border-gray-400'>
                     <td className='py-2'>
                         <Link href={`/product/${item.slug}`}>
                         <a>
-                            <div className="flex items-center">
-                                <img src={`${API_URL}${item.productImg.data[0].attributes.url}`} className="h-20 w-16 object-cover" alt={item.productImg.data[0].attributes.name} />
+                            <div className="flex items-center h-20 w-16">
+                                <Image src={`${API_URL}${item.productImg.data[0].attributes.url}`} layout="fill" objectFit='contain' objectPosition={"center"} alt={item.productImg.data[0].attributes.name} />
                                 <div className='mx-2 capitalize'>{item.name}</div>
                             </div>
                         </a>

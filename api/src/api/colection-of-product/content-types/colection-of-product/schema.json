@@ -27,12 +27,6 @@
       "target": "api::page.page",
       "inversedBy": "collections"
     },
-    "carousal": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::carousal.carousal",
-      "inversedBy": "collections"
-    },
     "landingPage": {
       "type": "relation",
       "relation": "manyToOne",
@@ -44,6 +38,9 @@
       "relation": "manyToMany",
       "target": "api::product.product",
       "mappedBy": "collections"
+    },
+    "name_arabic": {
+      "type": "string"
     }
   }
 }
