@@ -8,8 +8,9 @@ import ProductCard from "../../components/product/ProductCard";
 import { API_URL } from '../../utils/connectionConfig';
 import Loading from '../../components/loading/Loading';
 import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
 
- function Products({products,pages,errMsg}){
+ function Products({products,pages,errMsg,randumImg}){
     const router=useRouter();
     const {t,i18n}=useTranslation();
     const [productItems,setproductItems]=useState(products);
@@ -26,10 +27,11 @@ import { useTranslation } from 'next-i18next';
     const [loading,setLoading]=useState(true);
     const progres=useRef(); 
 
-    
+    console.log("imgs",randumImg)
     //loading
     useEffect(()=>{
         setLoading(false);
+        
     },[])
 
     useEffect(()=>{
@@ -154,6 +156,7 @@ import { useTranslation } from 'next-i18next';
     return(
         <Layout title="products pages" pages={pages}>
             <div className="container relative  mx-auto h-fit font-serif my-8 ">
+               {/* <Image src="https://s.wsj.net/public/resources/images/B3-FD456_ONE_OR_574V_20191004141817.jpg" layout='responsive' width={16} height={8} loading="eager"/>*/}
                 <div onClick={()=>setSideFilter(true)} className={`fixed ${sideFilter?"hidden":"block"} right-0 top-1/2 z-20 md:hidden`}>
                 <MdArrowBackIosNew className='text-primary text-4xl cursor-pointer'/>
                 </div>
@@ -324,7 +327,9 @@ export async function getStaticProps(ctx) {
     try{
         const {genre} =ctx.params;
         const locale=ctx.locale;
-            
+        const ramdumImgRes = await fetch(`${API_URL}/api/randum-image?populate=*`)
+        const ramdumImg=await ramdumImgRes.json();
+
             const pagesRes = await fetch(`${API_URL}/api/pages?populate=*`)
             const pages = await pagesRes.json()
             
@@ -379,6 +384,7 @@ export async function getStaticProps(ctx) {
             props: {
                 products:products.data,
                 pages:pages.data,
+                randumImg:ramdumImg.data,
                 errMsg:false, 
                 ...(await serverSideTranslations(locale, ['common',"product"]))
             },

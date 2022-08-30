@@ -112,13 +112,7 @@ export async function getStaticProps({locale}) {
            //offer products
            const offerRes = await fetch(`${API_URL}/api/products?filters[offer][$gt]=0&sort=offer:desc&populate=*&pagination[limit]=7`)
            const offerProducts = await offerRes.json()
-      //landig Page
-      //  const carousalRes = await fetch(`${API_URL}/api/landingpages?filters[type][$eq]=carousal&populate=%2A`)
-      //  const carousal = await carousalRes.json()
-     //   const topCollectionRes = await fetch(`${API_URL}/api/landingpages?filters[type][$eq]=topCollection&populate=%2A`)
-     //   const topCollection = await topCollectionRes.json()
-     //   const bottomCollectionRes = await fetch(`${API_URL}/api/landingpages?filters[type][$eq]=bottomCollection&populate=%2A`)
-     //   const bottomCollection = await bottomCollectionRes.json()
+
      const landingRes = await fetch(`${API_URL}/api/landingpages?populate=%2A`)
      const landigPage = await landingRes.json()
       //pages
@@ -135,9 +129,6 @@ export async function getStaticProps({locale}) {
             popularProducts:popularProducts.data||[],
             offerProducts:offerProducts.data||[],
             shoDetail:shoDetail.data,
-           // carousal:carousal.data||[],
-          //  topCollection:topCollection.data||[],
-           // bottomCollection:bottomCollection.data||[],
            landigPage:landigPage.data,
             errMsg:false,
             ...(await serverSideTranslations(locale, ['common',"product"]))

@@ -16,81 +16,19 @@ import ReactDOM from "react-dom";
 
 
 export default function Order({order,pages,errMsg}) {
-    //const PayPalButton = window.paypal&&window.paypal.Buttons.driver("react", { React, ReactDOM });
+    
     const router =useRouter();
-    //const [{isPending,options},paypalDispatch]=usePayPalScriptReducer();
     const {t}=useTranslation();
     const [errMessage,setErrMessage]=useState('');
     const [pay,setPay]=useState(true);
  
-    console.log("paypal",Paypal)
 
-  useEffect(()=>{
-        if(window.paypal){
-            return;
-        }
-         const scriptPaypal=document.createElement("script");
-         scriptPaypal.src=`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`
-         document.body.appendChild(scriptPaypal);
-  },[])
 
-  function Paypal({createOrder,onApprove,onError}){
-    const PayPalButton = window.paypal&&window.paypal.Buttons.driver("react", { React, ReactDOM });
-    return <PayPalButton 
-        createOrder={createOrder}
-     onApprove={onApprove}
-     onError={onError}
-    />;
- }
-  /*  useEffect(()=>{
-       const getPayPalClitId=async()=>{
-          try {
-            const {data:clientId}=await axios.get("/api/keys/paypal")
-            console.log("clientId",clientId)
-            paypalDispatch({type:"resetOptions",value:{
-                ...options,
-                "client-id":clientId,
-                currency:"USD"
-            }})
+    const handlePayment=async()=>{
+  
+    }
 
-            paypalDispatch({type:"setLoadingStatus",value:"pending"})
 
-          } catch (error) {
-            console.log("error",error);
-          }
-       }
-       getPayPalClitId()
-
-    },[])*/
-
-      const handlePayment=async()=>{
-       setPay(true);
-      }
-
-      // create order
-  const createOrder= (data, actions)=>{
-
-    return actions.order.create({
-            purchase_units: [
-                {
-                    amount: {
-                        value:order.attributes.totalPrice,
-                    },
-                },
-            ],
-        })
-        
-}
-
-//on approve
-const onApprove=(data, actions)=> {
-    return actions.order.capture()
-}
-
-//on Error
-const onError =(err)=> {
-   console.log("paypal error",err)
-}
 
 
   return (
@@ -179,26 +117,17 @@ const onError =(err)=> {
                             <div className="font-semibold">{t("placeorder:total_cost")}</div>
                             <div className="text-secondary">${order.attributes.totalPrice}</div>
                         </div>
-                     {
-                       !pay?(<div>
+                     
+                       <div>
                         <button onClick={()=>handlePayment()} className='w-full bg-primary text-white uppercase my-4 py-2'>{t("placeorder:pay")}</button>
                         <Link href={`/payment`} passHref>
                             <a>
                                 <div className='w-full text-center bg-gray-50 text-gray-900 uppercase  py-2 border border-secondary'>{t("placeorder:back")}</div>
                               </a>
                         </Link>
-                     </div>):(
-                         /* <PayPalButtons
-                          createOrder={(data, actions) => createOrder(data, actions)}
-                          onApprove={(data, actions) => onApprove(data, actions)}
-                          onError={(err)=>onError(err)}
-                        />*/
-                        <div><Paypal 
-                             createOrder={(data, actions) => createOrder(data, actions)}  
-                             onApprove={(data, actions) => onApprove(data, actions)}
-                             onError={(err)=>onError(err)}/></div>
-                     )
-                    }
+                     </div>
+                     
+                    
                     </div>
                 </div>
             </div>

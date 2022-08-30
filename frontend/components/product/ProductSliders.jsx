@@ -132,10 +132,8 @@ import {useTranslation} from "next-i18next";
               <Link href={`/product/${product?.slug}`}>
                 <a onMouseEnter={()=>setImgHover(true)} onMouseLeave={()=>setImgHover(false)} className=" ">
                   <div className="md:h-72 h-48 w-full relative  overflow-hidden">
-                      {<Image src={`${API_URL}${productImg.attributes.formats.small.url}`} alt="" layout="fill" objectFit="contain" objectPosition={"center"} loading="lazy"/>}
+                      {<Image src={`${API_URL}${productImg.attributes.formats.small.url}`} alt="" layout="fill" objectFit="contain" objectPosition={"center"} loading="eager"/>}
                   </div>
-                {/*<motion.Image initial={{display:"none"}}  animate={imgHover?{display:"block"}:{display:"none"}} transition={{type:"tween" ,duration:0.3}} src={`${API_URL}${product.hoverImg.data.attributes.url}`} alt="" width={400} height={256} layout="responsive" />*/}
-                {/*<img src={`${API_URL}${imgData(productImg).url}`} alt="" className="w-full h-64 object-contain"/>*/}
                 </a>
               </Link>
             </div>
@@ -173,7 +171,7 @@ import {useTranslation} from "next-i18next";
             <div key={productImg.id} className="flex justify-center ">
                 
                 <div onClick={()=>setProductId(productImg.attributes.name)} className={`relative cursor-pointer h-7 w-7 overflow-hidden rounded-full border ${productId===productImg.attributes.name?"border-secondary":"border-gray-400"} p-0.5`}>
-                    <Image src={`${API_URL}${productImg.attributes.formats.thumbnail.url}`} loading="lazy" layout="fill" objectFit="contain" objectPosition="center" alt="" />
+                    <Image src={`${API_URL}${productImg.attributes.formats.thumbnail.url}`} loading="eager" layout="fill" objectFit="contain" objectPosition="center" alt="" />
                 </div>
             </div>
             ))

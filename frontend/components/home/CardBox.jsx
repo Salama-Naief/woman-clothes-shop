@@ -27,7 +27,7 @@ const CardBox=({collection,height})=>{
          <div className="flex items-center justify-center ">
             <div className={`text-primary text-xl  relative overflow-hidden w-full`}>
               <div className={`${height}  w-full relative overflow-hidden`}>
-               {<Image src={`${API_URL}${collection.img.data.attributes.formats.small.url}`} alt=""  objectFit="cover" objectPosition="center" layout="fill" loading="lazy" className={` ${imgStyle.scale} ${imgStyle.opacity}transition ease-in-out delay-100 duration-500`}/>}
+               {<Image src={`${API_URL}${collection.img.data.attributes.formats.small.url}`} alt=""  objectFit="cover" objectPosition="center" layout="fill" loading="eager" className={` ${imgStyle.scale} ${imgStyle.opacity}transition ease-in-out delay-100 duration-500`}/>}
               </div>
                 <div onMouseOver={()=>handleEnterStyle()} onMouseLeave={()=>handleLeaveStyle()} className="absolute top-0 left-0 w-full h-full  flex justify-center">
                    <div className="absolute w-full z-10 bottom-10 text-center">

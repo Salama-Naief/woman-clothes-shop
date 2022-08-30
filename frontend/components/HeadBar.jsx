@@ -172,19 +172,19 @@ const HeadBar=({pages})=>{
                    {
                     page.attributes.name!=="home"&&<motion.div initial={{opacity:0,display:"none"}} animate={(pageItems===page.attributes.name)?{display:"block",opacity:1}:{display:"none",opacity:0}} className="">
                            { page.attributes.newImg.data&&<Link href={`/products/new-${page.attributes.slug}`}><a><div className="min-h-fit w-full mx-2 relative my-2">
-                              <Image src={`${API_URL}${page.attributes.newImg.data.attributes.url}`} width={200} height={200} alt={page.attributes.offerImg.data.attributes.name} />
+                              <Image src={`${API_URL}${page.attributes.newImg.data.attributes.url}`} width={200} height={200} loading="eager" alt={page.attributes.offerImg.data.attributes.name} />
                               <div className="font-semibold bg-gray-100 text-sm text-gray-900 absolute bottom-0 left-0 z-20 w-full text-center border border-secondary">{i18n.language==="ar"?page.attributes.newText_arabic:page.attributes.newText}</div>
                             </div>
                             </a></Link>
                            }
                            {page.attributes.offerImg.data&&<Link href={`/products/sales-${page.attributes.slug}`}><a> <div className="min-h-fit w-full mx-2 relative my-2">
-                              <Image src={`${API_URL}${page.attributes.offerImg.data.attributes.url}`} width={200} height={200} alt={page.attributes.offerImg.data.attributes.name}/>
+                              <Image src={`${API_URL}${page.attributes.offerImg.data.attributes.url}`} width={200} height={200} loading="eager" alt={page.attributes.offerImg.data.attributes.name}/>
                               <div className="font-semibold bg-gray-100 text-sm text-gray-900 absolute bottom-0 left-0 z-20 w-full text-center border border-secondary">{i18n.language==="ar"?page.attributes.offerText_arabic:page.attributes.offerText}</div>
                             </div>
                             </a></Link>
                            }
                            {page.attributes.popularImg.data&&<Link href={`/products/popular-${page.attributes.slug}`}><a> <div className="min-h-fit w-full mx-2 relative my-2">
-                              <Image src={`${API_URL}${page.attributes.popularImg.data.attributes.url}`} width={200} height={200} alt={page.attributes.offerImg.data.attributes.name} />
+                              <Image src={`${API_URL}${page.attributes.popularImg.data.attributes.url}`} width={200} height={200} loading="eager" alt={page.attributes.offerImg.data.attributes.name} />
                               <div className="font-semibold bg-gray-100 text-sm text-gray-900 absolute bottom-0 left-0 z-20 w-full text-center border border-secondary">{i18n.language==="ar"?page.attributes.popularText_arabic:page.attributes.popularText}</div>
                             </div>
                             </a></Link>

@@ -39,7 +39,7 @@ import dynamic from "next/dynamic";
                       <div className=" bg-primary my-1 rounded px-2 py-0.5  text-white">new</div>
                     </div>
                     
-                    {<Image src={`${API_URL}${pImg.attributes.url}`} width={pImg.attributes.width} height={pImg.attributes.height} onMouseMoveCapture={()=>{setProudctImg(pImg.attributes.name); setPUrl(pImg.attributes.url)}} layout="responsive" objectFit="contain" objectPosition="center" loading="lazy" alt={pImg.attributes.name} className={`w-full h-full object-contain cursor-grab `} />}
+                    {<Image src={`${API_URL}${pImg.attributes.url}`} width={pImg.attributes.width} height={pImg.attributes.height} onMouseMoveCapture={()=>{setProudctImg(pImg.attributes.name); setPUrl(pImg.attributes.url)}} layout="responsive" objectFit="contain" objectPosition="center" loading="eager" alt={pImg.attributes.name} className={`w-full h-full object-contain cursor-grab `} />}
             </div>
             ))
            }
@@ -60,7 +60,7 @@ import dynamic from "next/dynamic";
                 
                 <div onClick={()=>{setProudctImg(pImg.attributes.name);setPUrl(pImg.attributes.url)}}  className={`relative bg-gray-100 w-10 h-10 md:w-16 md:h-16 overflow-hidden rounded-full border-2 ${productImg===pImg.attributes.name?"border-secondary":"border-gray-400"} p-0.5`}>
                     
-                    <Image src={`${API_URL}${pImg.attributes.formats.thumbnail.url}`} loading="lazy" objectFit="contain" objectPosition="center" layout="fill" alt="" />
+                    <Image src={`${API_URL}${pImg.attributes.formats.thumbnail.url}`} loading="eager" objectFit="contain" objectPosition="center" layout="fill" alt="" />
                 </div>
             </div>
             ))}

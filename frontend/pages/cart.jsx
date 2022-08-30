@@ -35,7 +35,7 @@ export default function Cart() {
                         <Link href={`/product/${item.slug}`}>
                         <a>
                             <div className="flex items-center h-20 w-16">
-                                <Image src={`${API_URL}${item.productImg.data[0].attributes.url}`} layout="fill" objectFit='contain' objectPosition={"center"} alt={item.productImg.data[0].attributes.name} />
+                                <Image src={`${API_URL}${item.productImg.data[0].attributes.url}`} loading="eager" layout="fill" objectFit='contain' objectPosition={"center"} alt={item.productImg.data[0].attributes.name} />
                                 <div className='mx-2 capitalize'>{item.name}</div>
                             </div>
                         </a>
